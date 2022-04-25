@@ -13,5 +13,6 @@ public class Atividade {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "nota_id")
 	private Nota nota;
 }

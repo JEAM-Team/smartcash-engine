@@ -1,11 +1,9 @@
 package com.smartcash.engine.models.domain;
 
+import com.smartcash.engine.models.enums.TipoCarteira;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -16,7 +14,14 @@ public abstract class Carteira {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-
+	@OneToMany(mappedBy = "carteira")
 	private List<Conta> contas;
+
+	@OneToMany(mappedBy = "carteira")
 	private List<Atividade> historico;
+
+	private TipoCarteira tipo;
+
+	@OneToMany(mappedBy = "carteira")
+	private List<Produto> produtos;
 }
