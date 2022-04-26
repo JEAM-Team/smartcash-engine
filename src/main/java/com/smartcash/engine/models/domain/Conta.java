@@ -14,7 +14,8 @@ public class Conta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(mappedBy = "conta")
+	@OneToMany
+	@JoinColumn(name = "nota_id")
 	private List<Nota> notas;
 
 	private String nome;

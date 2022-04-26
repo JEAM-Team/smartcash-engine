@@ -14,14 +14,17 @@ public abstract class Carteira {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@OneToMany(mappedBy = "carteira")
+	@OneToMany
+	@JoinColumn(name = "conta_id")
 	private List<Conta> contas;
 
-	@OneToMany(mappedBy = "carteira")
+	@OneToMany
+	@JoinColumn(name = "atividade_id")
 	private List<Atividade> historico;
 
 	private TipoCarteira tipo;
 
-	@OneToMany(mappedBy = "carteira")
+	@OneToMany
+	@JoinColumn(name = "produto_id")
 	private List<Produto> produtos;
 }
