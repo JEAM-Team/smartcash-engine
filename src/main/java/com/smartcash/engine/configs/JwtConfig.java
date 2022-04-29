@@ -1,10 +1,7 @@
 package com.smartcash.engine.configs;
 
-import com.smartcash.engine.services.UsuarioServiceImpl;
-import org.springframework.beans.factory.InitializingBean;
+import com.smartcash.engine.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,9 +20,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class JwtConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
-    private UsuarioServiceImpl usuarioService;
+    private UsuarioService usuarioService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+
+    private static final String[] AUTH_WHITELIST = {
+            "/login",
+            "/usuario/cadastro"
+    };
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,7 +45,7 @@ public class JwtConfig extends WebSecurityConfigurerAdapter{
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthFilter(authenticationManager()))
