@@ -3,6 +3,7 @@ package com.smartcash.engine.models.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,9 +23,7 @@ public class Usuario {
 
     private String senha;
 
-    private String confirmSenha;
-
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "carteira_id")
-    private Carteira carteira;
+    private List<Carteira> carteiras;
 }
