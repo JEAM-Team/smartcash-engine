@@ -1,0 +1,15 @@
+package com.smartcash.engine.exceptions.usuario;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+@ControllerAdvice
+public class UsuarioExceptionHandler {
+
+    @ExceptionHandler({EmailDuplicadoException.class})
+    public ResponseEntity<ErrorEntity> emailDuplicadoException(EmailDuplicadoException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity());
+    }
+}
