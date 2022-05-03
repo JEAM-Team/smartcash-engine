@@ -35,6 +35,12 @@ public class NotaController {
         return ResponseEntity.status(HttpStatus.OK).body(nota);
     }
 
+    @GetMapping("/conta/{contaId}")
+    public ResponseEntity<List<Nota>> findByContaId(@PathVariable Long contaId) {
+        List<Nota> nota = service.findByContaId(contaId);
+        return ResponseEntity.status(HttpStatus.OK).body(nota);
+    }
+
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable Long id, @RequestBody Nota nota) {
