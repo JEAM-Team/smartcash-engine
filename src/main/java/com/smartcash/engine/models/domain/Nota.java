@@ -36,4 +36,8 @@ public class Nota {
 	@ManyToOne
 	@JoinColumn(name = "produto_id")
 	private Produto produto;
+
+	@ManyToOne
+	@JoinColumn(name = "conta_id")
+	private Conta conta;
 }
