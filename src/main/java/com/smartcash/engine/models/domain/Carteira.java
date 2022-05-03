@@ -1,14 +1,20 @@
 package com.smartcash.engine.models.domain;
 
 import com.smartcash.engine.models.enums.TipoCarteira;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Data
-public abstract class Carteira {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Carteira {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +33,5 @@ public abstract class Carteira {
 	@OneToMany
 	@JoinColumn(name = "produto_id")
 	private List<Produto> produtos;
+
 }
