@@ -64,10 +64,4 @@ public class JwtAuthFilter extends UsernamePasswordAuthenticationFilter {
         response.getWriter().write(token);
         response.getWriter().flush();
     }
-
-
-    public static void print() {
-        System.out.println(RB.getString("security.auth.expiration"));
-        System.out.println(RB.getString("security.auth.client-secret"));
-    }
 }
