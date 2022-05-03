@@ -1,9 +1,11 @@
 package com.smartcash.engine.models.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartcash.engine.models.enums.TipoNota;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +22,8 @@ public class Nota {
 
 	private Boolean repeticao;
 
-	private LocalDateTime data;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private LocalDate data;
 
 	private Integer qtdVezes;
 
