@@ -23,6 +23,7 @@ public class NotaService {
         repository.save(nota);
     }
 
+
     public List<Nota> findAll() {
         return repository.findAll();
     }
