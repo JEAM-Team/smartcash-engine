@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartcash.engine.models.data.UsuarioDetails;
 import com.smartcash.engine.models.domain.Usuario;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,7 @@ import java.util.ResourceBundle;
 
 public class JwtAuthFilter extends UsernamePasswordAuthenticationFilter {
 
-    private static final ResourceBundle RB = ResourceBundle.getBundle("application");
+    private static final ResourceBundle RB = ResourceBundle.getBundle("application-".concat(System.getProperty("spring.profiles.active", "prod")));
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthFilter(AuthenticationManager authenticationManager) {
