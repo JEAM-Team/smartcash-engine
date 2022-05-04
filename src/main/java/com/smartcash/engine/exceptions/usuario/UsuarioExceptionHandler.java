@@ -12,8 +12,8 @@ import java.util.Locale;
 @ControllerAdvice
 public class UsuarioExceptionHandler {
 
-    @ExceptionHandler({EmailDuplicadoException.class})
+    @ExceptionHandler(EmailDuplicadoException.class)
     public ResponseEntity<ErrorEntity> emailDuplicadoException(EmailDuplicadoException e){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity(e.getMessage(), e.getCause().toString(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Email duplicado", e.getMessage(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))));
     }
 }
