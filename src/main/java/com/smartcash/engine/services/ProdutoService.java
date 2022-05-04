@@ -1,4 +1,4 @@
-package com.smartcash.engine.service;
+package com.smartcash.engine.services;
 
 import com.smartcash.engine.models.domain.Produto;
 import com.smartcash.engine.repository.ProdutoRepository;
@@ -20,6 +20,10 @@ public class ProdutoService {
 
     public List<Produto> findAll() {
         return repository.findAll();
+    }
+
+    public List<Produto> findByCarteiraId(Long carteiraId) {
+        return repository.findByCarteiraId(carteiraId);
     }
 
     public Optional<Produto> findById(Long id) {

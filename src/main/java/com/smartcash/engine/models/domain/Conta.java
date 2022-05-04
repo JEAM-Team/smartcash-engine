@@ -19,4 +19,8 @@ public class Conta {
 	private Double valorTotal;
 
 	private TipoConta tipoConta;
+
+	@ManyToOne
+	@JoinColumn(name = "carteira_id")
+	private Carteira carteira;
 }

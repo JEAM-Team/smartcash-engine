@@ -40,4 +40,8 @@ public class Nota {
 	@ManyToOne
 	@JoinColumn(name = "conta_id")
 	private Conta conta;
+
+	@ManyToOne
+	@JoinColumn(name = "carteira_id")
+	private Carteira carteira;
 }

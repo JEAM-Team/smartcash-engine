@@ -1,5 +1,6 @@
-package com.smartcash.engine.service;
+package com.smartcash.engine.services;
 
+import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Nota;
 import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,11 @@ public class NotaService {
     @Autowired
     NotaRepository repository;
 
+    @Autowired
+    AtividadeService atividadeService;
+
     public void create(Nota nota) {
+        atividadeService.create(Atividade.builder().nota(nota).carteira(nota.getCarteira()).build());
         repository.save(nota);
     }
 
