@@ -36,7 +36,7 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        var usuario = usuarioRepository.findByEmailIgnoreCase(email);
+        var usuario = usuarioRepository.findByEmail(email);
         if (usuario.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + email + "] não encontrado");
         }
@@ -45,7 +45,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public void save(UsuarioDTO dto) {
-        usuarioRepository.findByEmailIgnoreCase(dto.email()).ifPresent(u -> {
+        usuarioRepository.findByEmail(dto.email()).ifPresent(u -> {
             throw new EmailDuplicadoException(ms.getMessage("exception.usuario.email-duplicado", null, Locale.getDefault()));
         });
         var usuario = new Usuario();
