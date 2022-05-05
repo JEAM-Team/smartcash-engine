@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartcash.engine.models.data.UsuarioDetails;
 import com.smartcash.engine.models.domain.Usuario;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +22,8 @@ import java.util.ResourceBundle;
 
 public class JwtAuthFilter extends UsernamePasswordAuthenticationFilter {
 
-    private static final ResourceBundle RB = ResourceBundle.getBundle("application-".concat(System.getProperty("spring.profiles.active", "prod")));
+    private static final ResourceBundle RB_PROFILE = ResourceBundle.getBundle("application-".concat(System.getProperty("spring.profiles.active", "prod")));
+    private static final ResourceBundle RB = ResourceBundle.getBundle("application");
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthFilter(AuthenticationManager authenticationManager) {
@@ -60,7 +60,7 @@ public class JwtAuthFilter extends UsernamePasswordAuthenticationFilter {
         String token = JWT.create().
                 withSubject(usuarioData.getUsername())
                 .withExpiresAt(Date.from(Instant.now().plusSeconds(Long.parseLong(RB.getString("security.auth.expiration")))))
-                .sign(Algorithm.HMAC512(RB.getString("security.auth.client-secret")));
+                .sign(Algorithm.HMAC512(RB_PROFILE.getString("security.auth.client-secret")));
 
         response.getWriter().write(token);
         response.getWriter().flush();

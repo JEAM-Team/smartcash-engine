@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 public class JwtFilterValidator extends BasicAuthenticationFilter {
 
     private static final ResourceBundle RB = ResourceBundle.getBundle("application");
+    private static final ResourceBundle RB_PROFILE = ResourceBundle.getBundle("application-".concat(System.getProperty("spring.profiles.active", "prod")));
 
     public JwtFilterValidator(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -50,7 +51,7 @@ public class JwtFilterValidator extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String token) {
 
-        var usuario = JWT.require(Algorithm.HMAC512(RB.getString("security.auth.client-secret")))
+        var usuario = JWT.require(Algorithm.HMAC512(RB_PROFILE.getString("security.auth.client-secret")))
                 .build()
                 .verify(token)
                 .getSubject();
