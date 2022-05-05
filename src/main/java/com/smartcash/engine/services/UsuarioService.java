@@ -56,7 +56,7 @@ public class UsuarioService implements UserDetailsService {
     }
 
     public Usuario getByEmail(String email) {
-        return usuarioRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new UsernameNotFoundException("Usuário [" + email + "] não encontrado"));
+        return usuarioRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuário [" + email + "] não encontrado"));
     }
 
     public void update(String email, UsuarioDTO dto) {
