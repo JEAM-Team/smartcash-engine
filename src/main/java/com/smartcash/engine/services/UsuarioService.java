@@ -54,4 +54,14 @@ public class UsuarioService implements UserDetailsService {
         usuario.setSenha(encoder.encode(dto.senha()));
         usuarioRepository.save(usuario);
     }
+
+    public Usuario getByEmail(String email) {
+        return usuarioRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new UsernameNotFoundException("Usuário [" + email + "] não encontrado"));
+    }
+
+    public void update(String email, UsuarioDTO dto) {
+        var usuario = getByEmail(email);
+        BeanUtils.copyProperties(dto, usuario, "id, carteira, cpf");
+        usuarioRepository.save(usuario);
+    }
 }
