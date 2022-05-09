@@ -2,10 +2,7 @@ package com.smartcash.engine.models.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -22,4 +19,8 @@ public class Produto {
 	private String descricao;
 
 	private Double valor;
+
+	@ManyToOne
+	@JoinColumn(name = "carteira_id")
+	private Carteira carteira;
 }

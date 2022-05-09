@@ -6,6 +6,8 @@ import com.smartcash.engine.repository.CarteiraRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CarteiraService {
 
@@ -17,5 +19,13 @@ public class CarteiraService {
                 .tipo(TipoCarteira.PESSOAL)
                 .build();
         return repository.save(carteira);
+    }
+
+    public void create(Carteira carteira) {
+        repository.save(carteira);
+    }
+
+    public List<Carteira> findAll() {
+        return repository.findAll();
     }
 }

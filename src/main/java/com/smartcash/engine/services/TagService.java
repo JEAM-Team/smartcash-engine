@@ -1,4 +1,4 @@
-package com.smartcash.engine.service;
+package com.smartcash.engine.services;
 
 import com.smartcash.engine.models.domain.Tag;
 import com.smartcash.engine.repository.TagRepository;

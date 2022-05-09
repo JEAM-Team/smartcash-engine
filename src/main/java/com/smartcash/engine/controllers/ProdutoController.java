@@ -1,7 +1,8 @@
-package com.smartcash.engine.controller;
+package com.smartcash.engine.controllers;
 
+import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.domain.Produto;
-import com.smartcash.engine.service.ProdutoService;
+import com.smartcash.engine.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,12 @@ public class ProdutoController {
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable Long id, @RequestBody Produto produto) {
         service.update(id, produto);
+    }
+
+    @GetMapping("/carteira")
+    public ResponseEntity<List<Produto>> listProdutoByCarteira(@PathVariable Long carteiraId) {
+        List<Produto> produtos = service.findByCarteiraId(carteiraId);
+        return ResponseEntity.status(HttpStatus.OK).body(produtos);
     }
 
     @DeleteMapping("/{id}")

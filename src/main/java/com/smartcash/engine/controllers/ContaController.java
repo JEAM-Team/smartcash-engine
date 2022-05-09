@@ -1,8 +1,8 @@
-package com.smartcash.engine.controller;
+package com.smartcash.engine.controllers;
 
+import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Conta;
-import com.smartcash.engine.models.domain.Nota;
-import com.smartcash.engine.service.ContaService;
+import com.smartcash.engine.services.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +34,11 @@ public class ContaController {
     public ResponseEntity<Optional<Conta>> findById(@PathVariable Long id) {
         Optional<Conta> conta = service.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(conta);
+    }
+    @GetMapping("/carteira")
+    public ResponseEntity<List<Conta>> listContaByCarteira(@PathVariable Long carteiraId) {
+        List<Conta> contas = service.findByCarteiraId(carteiraId);
+        return ResponseEntity.status(HttpStatus.OK).body(contas);
     }
 
     @PutMapping("/{id}")

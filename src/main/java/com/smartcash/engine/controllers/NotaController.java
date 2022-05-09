@@ -1,7 +1,7 @@
-package com.smartcash.engine.controller;
+package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Nota;
-import com.smartcash.engine.service.NotaService;
+import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
