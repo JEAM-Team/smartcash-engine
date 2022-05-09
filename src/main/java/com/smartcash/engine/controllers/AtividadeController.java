@@ -19,7 +19,7 @@ public class AtividadeController {
     @Autowired
     AtividadeService service;
 
-    @GetMapping("/carteira")
+    @GetMapping("/{carteiraId}")
     public ResponseEntity<List<Atividade>> listAtividadeByCarteira(@PathVariable Long carteiraId) {
         List<Atividade> atividades = service.findByCarteiraId(carteiraId);
         return ResponseEntity.status(HttpStatus.OK).body(atividades);
