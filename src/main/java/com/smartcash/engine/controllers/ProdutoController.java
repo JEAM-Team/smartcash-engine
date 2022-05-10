@@ -2,6 +2,7 @@ package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.domain.Produto;
+import com.smartcash.engine.models.dtos.ProdutoDto;
 import com.smartcash.engine.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> findAll() {
-        List<Produto> produtos = service.findAll();
+    public ResponseEntity<List<ProdutoDto>> findAll() {
+        List<ProdutoDto> produtos = service.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(produtos);
     }
 

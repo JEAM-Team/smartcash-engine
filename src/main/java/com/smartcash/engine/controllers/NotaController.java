@@ -1,6 +1,7 @@
 package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.NotaDto;
 import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,8 @@ public class NotaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Nota>> findAll() {
-        List<Nota> notas = service.findAll();
+    public ResponseEntity<List<NotaDto>> findAll() {
+        List<NotaDto> notas = service.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(notas);
     }
 
