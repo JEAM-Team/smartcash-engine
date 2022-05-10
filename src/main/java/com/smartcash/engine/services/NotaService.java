@@ -2,10 +2,12 @@ package com.smartcash.engine.services;
 
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.NotaDto;
 import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +26,17 @@ public class NotaService {
     }
 
 
-    public List<Nota> findAll() {
-        return repository.findAll();
+    public List<NotaDto> findAll() {
+        List<Nota> notas = repository.findAll();
+        List<NotaDto> notaDtos = new ArrayList<>();
+        notas.forEach(nota -> {
+            NotaDto notaDto = new NotaDto();
+            notaDto.setTitulo(nota.getTitulo());
+            notaDto.setValor(nota.getValor());
+            notaDto.setData(nota.getData());
+            notaDtos.add(notaDto);
+        });
+        return notaDtos;
     }
 
     public Optional<Nota> findById(Long id) {
