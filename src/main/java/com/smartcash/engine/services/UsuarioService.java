@@ -1,5 +1,7 @@
 package com.smartcash.engine.services;
 
+import br.com.caelum.stella.validation.CPFValidator;
+import com.smartcash.engine.exceptions.usuario.CamposInvalidosException;
 import com.smartcash.engine.exceptions.usuario.EmailDuplicadoException;
 import com.smartcash.engine.models.data.UsuarioDetails;
 import com.smartcash.engine.models.domain.Usuario;
@@ -34,13 +36,14 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private PasswordEncoder encoder;
 
+    private final CPFValidator cpfValidator = new CPFValidator();
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         var usuario = usuarioRepository.findByEmail(email);
         if (usuario.isEmpty()) {
             throw new UsernameNotFoundException("Usuário [" + email + "] não encontrado");
         }
-
         return new UsuarioDetails(usuario);
     }
 
@@ -48,6 +51,7 @@ public class UsuarioService implements UserDetailsService {
         usuarioRepository.findByEmail(dto.email()).ifPresent(u -> {
             throw new EmailDuplicadoException(ms.getMessage("exception.usuario.email-duplicado", null, Locale.getDefault()));
         });
+        validacaoCadastro(dto);
         var usuario = new Usuario();
         BeanUtils.copyProperties(dto, usuario, "id, carteira, senha");
         usuario.setCarteiras(Collections.singletonList(carteiraService.save()));
@@ -63,5 +67,12 @@ public class UsuarioService implements UserDetailsService {
         var usuario = getByEmail(email);
         BeanUtils.copyProperties(dto, usuario, "id, carteira, cpf");
         usuarioRepository.save(usuario);
+    }
+
+    public void validacaoCadastro(UsuarioDTO dto) {
+        boolean isBlank = dto.nome().isBlank() || dto.sobrenome().isBlank() || dto.email().isBlank() || dto.senha().isBlank() || dto.cpf().isBlank();
+        if (isBlank)
+            throw new CamposInvalidosException("");
+        cpfValidator.assertValid(dto.cpf());
     }
 }

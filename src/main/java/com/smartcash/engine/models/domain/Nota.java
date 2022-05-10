@@ -5,6 +5,9 @@ import com.smartcash.engine.models.enums.TipoNota;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,17 +19,25 @@ public class Nota {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotBlank
 	private String titulo;
 
+	@NotNull
+	@Min(value = 0, message = "Apenas valores positivos são permitidos.")
 	private Double valor;
 
+	@NotNull
 	private Boolean repeticao;
 
+	@NotNull
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	private LocalDate data;
 
+	@NotNull
+	@Min(value = 0, message = "Apenas valores positivos são permitidos")
 	private Integer qtdVezes;
 
+	@NotNull
 	private TipoNota tipo;
 
 	@ManyToOne

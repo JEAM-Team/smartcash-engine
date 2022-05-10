@@ -4,6 +4,10 @@ import com.smartcash.engine.models.enums.TipoConta;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -14,10 +18,14 @@ public class Conta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotBlank
 	private String nome;
 
+	@NotNull
+	@Min(0)
 	private Double valorTotal;
 
+	@NotNull
 	private TipoConta tipoConta;
 
 	@ManyToOne
