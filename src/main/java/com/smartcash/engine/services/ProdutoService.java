@@ -1,5 +1,6 @@
 package com.smartcash.engine.services;
 
+import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.models.domain.Produto;
 import com.smartcash.engine.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class ProdutoService {
         return repository.findByCarteiraId(carteiraId);
     }
 
-    public Optional<Produto> findById(Long id) {
-        return repository.findById(id);
+    public Produto findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Não foi possível encontrar o produto com o ID: " + id));
     }
 
     public void update(Long id, Produto produto) {

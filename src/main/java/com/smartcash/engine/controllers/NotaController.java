@@ -1,12 +1,14 @@
 package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.NotaDTO;
 import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,29 +17,29 @@ import java.util.Optional;
 public class NotaController {
 
     @Autowired
-    NotaService service;
+    private NotaService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Nota nota) {
+    public void create(@RequestBody @Valid NotaDTO nota) {
         service.create(nota);
     }
 
     @GetMapping
     public ResponseEntity<List<Nota>> findAll() {
-        List<Nota> notas = service.findAll();
+        var notas = service.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(notas);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Nota>> findById(@PathVariable Long id) {
-        Optional<Nota> nota = service.findById(id);
+    public ResponseEntity<Nota> findById(@PathVariable Long id) {
+        var nota = service.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(nota);
     }
 
     @GetMapping("/conta/{contaId}")
     public ResponseEntity<List<Nota>> findByContaId(@PathVariable Long contaId) {
-        List<Nota> nota = service.findByContaId(contaId);
+        var nota = service.findByContaId(contaId);
         return ResponseEntity.status(HttpStatus.OK).body(nota);
     }
 

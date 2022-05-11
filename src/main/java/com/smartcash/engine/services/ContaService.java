@@ -1,5 +1,6 @@
 package com.smartcash.engine.services;
 
+import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.exceptions.carteira.BadRequestException;
 import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.dtos.ContaDTO;
@@ -36,8 +37,8 @@ public class ContaService {
         return repository.findAll();
     }
 
-    public Optional<Conta> findById(Long id) {
-        return repository.findById(id);
+    public Conta findById(Long id) {
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Não foi possível encontrar a conta com ID: " + id));
     }
 
     public List<Conta> findByCarteiraId(Long carteiraId) {

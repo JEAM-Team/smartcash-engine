@@ -1,5 +1,6 @@
 package com.smartcash.engine.services;
 
+import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.models.domain.Tag;
 import com.smartcash.engine.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,5 +14,9 @@ public class TagService {
 
     public void create(Tag tag) {
         repository.save(tag);
+    }
+
+    public Tag findById(Long id){
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Não pode ser encontrado nem uma Tag com o ID: " + id));
     }
 }
