@@ -9,6 +9,7 @@ import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class NotaService {
 
     public void create(Nota nota) {
         atividadeService.create(Atividade.builder().nota(nota).carteira(nota.getCarteira()).build());
+        createRepeticao(nota);
         repository.save(nota);
     }
 
@@ -61,6 +63,18 @@ public class NotaService {
         return repository.findByContaId(contaId);
     }
 
+    public void createRepeticao(Nota nota) {
+        if (nota.getQtdVezes() > 1 && nota.getRepeticao().equals(true)) {
+            LocalDate data = nota.getData();
+            for (int i = 1; i < nota.getQtdVezes(); i++) {
+                Nota notaRepeticao = Nota.builder().titulo(nota.getTitulo()).valor(nota.getValor()).repeticao(true)
+                        .data(data.plusDays(30L *i)).tipo(nota.getTipo()).tag(nota.getTag())
+                        .produto(nota.getProduto()).conta(nota.getConta()).carteira(nota.getCarteira()).build();
+                atividadeService.create(Atividade.builder().nota(notaRepeticao).carteira(nota.getCarteira()).build());
+                repository.save(notaRepeticao);
+            }
+        }
+
     public CalculaResultadoDto calculaTotal() {
         List<Nota> notas = repository.findAll();
         Double recebimento = 0.0;
@@ -72,5 +86,6 @@ public class NotaService {
             }
         }
         return CalculaResultadoDto.builder().totalPagamento(pagamento).totalRecebimento(recebimento).build();
+
     }
 }
