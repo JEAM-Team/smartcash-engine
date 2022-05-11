@@ -62,10 +62,17 @@ public class NotaService {
     }
 
     public CalculaResultadoDto calculaTotal() {
-        Double totalPagamento = repository.countTotal(TipoNota.PAGAMENTO);
-        Double totalRecebimento = repository.countTotal(TipoNota.RECEBIMENTO);
-
-        return CalculaResultadoDto.builder().totalPagamento(totalPagamento).totalRecebimento(totalRecebimento).build();
-
+        List<Nota> notas = repository.findAll();
+        Double recebimento = 0.0;
+        Double pagamento = 0.0;
+        for (Nota nota : notas) {
+            if (nota.getTipo().equals(TipoNota.RECEBIMENTO)) {
+                recebimento += nota.getValor();
+            }
+            if (nota.getTipo().equals(TipoNota.PAGAMENTO)) {
+                pagamento += nota.getValor();
+            }
+        }
+        return CalculaResultadoDto.builder().totalPagamento(pagamento).totalRecebimento(recebimento).build();
     }
 }
