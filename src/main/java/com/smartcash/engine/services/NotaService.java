@@ -66,11 +66,9 @@ public class NotaService {
         Double recebimento = 0.0;
         Double pagamento = 0.0;
         for (Nota nota : notas) {
-            if (nota.getTipo().equals(TipoNota.RECEBIMENTO)) {
-                recebimento += nota.getValor();
-            }
-            if (nota.getTipo().equals(TipoNota.PAGAMENTO)) {
-                pagamento += nota.getValor();
+            switch (nota.getTipo()) {
+                case PAGAMENTO -> pagamento += nota.getValor();
+                case RECEBIMENTO -> recebimento += nota.getValor();
             }
         }
         return CalculaResultadoDto.builder().totalPagamento(pagamento).totalRecebimento(recebimento).build();
