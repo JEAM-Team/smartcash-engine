@@ -7,6 +7,7 @@ import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,10 +63,10 @@ public class NotaService {
 
     public void createRepeticao(Nota nota) {
         if (nota.getQtdVezes() > 1 && nota.getRepeticao().equals(true)) {
-            for (int i = 0; i < nota.getQtdVezes()-1; i++) {
-                //Ajustar data da nota
+            LocalDate data = nota.getData();
+            for (int i = 1; i < nota.getQtdVezes(); i++) {
                 Nota notaRepeticao = Nota.builder().titulo(nota.getTitulo()).valor(nota.getValor()).repeticao(true)
-                        .data(nota.getData().plusDays(30)).tipo(nota.getTipo()).tag(nota.getTag())
+                        .data(data.plusDays(30L *i)).tipo(nota.getTipo()).tag(nota.getTag())
                         .produto(nota.getProduto()).conta(nota.getConta()).carteira(nota.getCarteira()).build();
                 atividadeService.create(Atividade.builder().nota(notaRepeticao).carteira(nota.getCarteira()).build());
                 repository.save(notaRepeticao);
