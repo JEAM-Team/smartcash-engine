@@ -2,14 +2,19 @@ package com.smartcash.engine.models.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.smartcash.engine.models.enums.TipoNota;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Nota {
 
 	@Id

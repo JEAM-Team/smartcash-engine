@@ -22,6 +22,7 @@ public class NotaService {
 
     public void create(Nota nota) {
         atividadeService.create(Atividade.builder().nota(nota).carteira(nota.getCarteira()).build());
+        createRepeticao(nota);
         repository.save(nota);
     }
 
@@ -57,5 +58,18 @@ public class NotaService {
 
     public List<Nota> findByContaId(Long contaId) {
         return repository.findByContaId(contaId);
+    }
+
+    public void createRepeticao(Nota nota) {
+        if (nota.getQtdVezes() > 1 && nota.getRepeticao().equals(true)) {
+            for (int i = 0; i < nota.getQtdVezes()-1; i++) {
+                //Ajustar data da nota
+                Nota notaRepeticao = Nota.builder().titulo(nota.getTitulo()).valor(nota.getValor()).repeticao(true)
+                        .data(nota.getData().plusDays(30)).tipo(nota.getTipo()).tag(nota.getTag())
+                        .produto(nota.getProduto()).conta(nota.getConta()).carteira(nota.getCarteira()).build();
+                atividadeService.create(Atividade.builder().nota(notaRepeticao).carteira(nota.getCarteira()).build());
+                repository.save(notaRepeticao);
+            }
+        }
     }
 }
