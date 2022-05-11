@@ -1,6 +1,7 @@
 package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.CalculaResultadoDto;
 import com.smartcash.engine.models.dtos.NotaDto;
 import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,11 @@ public class NotaController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @GetMapping("/total")
+    @ResponseStatus(HttpStatus.OK)
+    public CalculaResultadoDto getTotal() {
+        return service.calculaTotal();
     }
 }
