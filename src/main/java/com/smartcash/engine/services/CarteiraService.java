@@ -1,5 +1,7 @@
 package com.smartcash.engine.services;
 
+import com.smartcash.engine.exceptions.NotFoundException;
+import com.smartcash.engine.exceptions.carteira.BadRequestException;
 import com.smartcash.engine.models.domain.Carteira;
 import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.repository.CarteiraRepository;
@@ -27,5 +29,9 @@ public class CarteiraService {
 
     public List<Carteira> findAll() {
         return repository.findAll();
+    }
+
+    public Carteira findById(Long id){
+        return repository.findById(id).orElseThrow(() -> new NotFoundException("Não pode ser encontrado a carteira com id: " + id));
     }
 }

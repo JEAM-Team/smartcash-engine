@@ -21,7 +21,7 @@ public class AtividadeController {
 
     @GetMapping("/{carteiraId}")
     public ResponseEntity<List<Atividade>> listAtividadeByCarteira(@PathVariable Long carteiraId) {
-        List<Atividade> atividades = service.findByCarteiraId(carteiraId);
+        var atividades = service.findByCarteiraId(carteiraId);
         return ResponseEntity.status(HttpStatus.OK).body(atividades);
     }
 }

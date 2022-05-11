@@ -2,6 +2,7 @@ package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Conta;
+import com.smartcash.engine.models.dtos.ContaDTO;
 import com.smartcash.engine.services.ContaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class ContaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody @Valid Conta conta) {
+    public void create(@RequestBody @Valid ContaDTO conta) {
         service.create(conta);
     }
 
@@ -44,7 +45,7 @@ public class ContaController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Long id, @RequestBody Conta conta) {
+    public void update(@PathVariable Long id, @RequestBody ContaDTO conta) {
         service.update(id, conta);
     }
 
