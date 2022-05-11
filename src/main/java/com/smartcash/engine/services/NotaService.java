@@ -2,7 +2,9 @@ package com.smartcash.engine.services;
 
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.CalculaResultadoDto;
 import com.smartcash.engine.models.dtos.NotaDto;
+import com.smartcash.engine.models.enums.TipoNota;
 import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,18 @@ public class NotaService {
 
     public List<Nota> findByContaId(Long contaId) {
         return repository.findByContaId(contaId);
+    }
+
+    public CalculaResultadoDto calculaTotal() {
+        List<Nota> notas = repository.findAll();
+        Double recebimento = 0.0;
+        Double pagamento = 0.0;
+        for (Nota nota : notas) {
+            switch (nota.getTipo()) {
+                case PAGAMENTO -> pagamento += nota.getValor();
+                case RECEBIMENTO -> recebimento += nota.getValor();
+            }
+        }
+        return CalculaResultadoDto.builder().totalPagamento(pagamento).totalRecebimento(recebimento).build();
     }
 }
