@@ -3,6 +3,7 @@ package com.smartcash.engine.services;
 import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
 import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.repository.NotaRepository;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class NotaService {
@@ -59,12 +59,10 @@ public class NotaService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("Não pode ser encontrado a nota com ID: " + id));
     }
 
-    public void update(Long id, Nota nota) {
-        repository.findById(id).map(not -> {
-            nota.setId(id);
-            repository.save(nota);
-            return nota;
-        });
+    public void update(Long id, EditNota dto) {
+        var nota = findById(id);
+        BeanUtils.copyProperties("id", "tagId", "contaId", "carteiraId", "produtoId");
+        repository.save(nota);
     }
 
     public void delete(Long id) {

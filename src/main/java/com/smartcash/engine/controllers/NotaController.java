@@ -1,6 +1,7 @@
 package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
 import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class NotaController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Long id, @RequestBody Nota nota) {
+    public void update(@PathVariable Long id, @RequestBody @Valid EditNota nota) {
         service.update(id, nota);
     }
 

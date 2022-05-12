@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -34,6 +35,9 @@ public class Conta {
 	@ManyToOne
 	@JoinColumn(name = "carteira_id")
 	private Carteira carteira;
+
+	@OneToMany(mappedBy = "conta")
+	private List<Nota> notas;
 
 	@Override
 	public boolean equals(Object o) {

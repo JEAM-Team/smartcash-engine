@@ -23,4 +23,7 @@ public class Carteira {
 
 	@NotNull
 	private TipoCarteira tipo;
+
+	@OneToMany(mappedBy = "carteira")
+	private List<Conta> contas;
 }

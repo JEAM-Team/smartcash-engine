@@ -1,7 +1,8 @@
 package com.smartcash.engine.controllers;
 
-import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.domain.Produto;
+import com.smartcash.engine.models.dtos.EditProduto;
+import com.smartcash.engine.models.dtos.ProdutoPost;
 import com.smartcash.engine.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/produto")
@@ -20,7 +20,7 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Produto produto) {
+    public void create(@RequestBody ProdutoPost produto) {
         service.create(produto);
     }
 
@@ -31,14 +31,14 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Produto>> findById(@PathVariable Long id) {
-        Optional<Produto> produto = service.findById(id);
+    public ResponseEntity<Produto> findById(@PathVariable Long id) {
+        Produto produto = service.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(produto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Long id, @RequestBody Produto produto) {
+    public void update(@PathVariable Long id, @RequestBody EditProduto produto) {
         service.update(id, produto);
     }
 
