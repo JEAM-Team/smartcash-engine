@@ -33,8 +33,8 @@ public class ContaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Conta>> findById(@PathVariable Long id) {
-        Optional<Conta> conta = service.findById(id);
+    public ResponseEntity<Conta> findById(@PathVariable Long id) {
+        Conta conta = service.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(conta);
     }
     @GetMapping("/carteira")
