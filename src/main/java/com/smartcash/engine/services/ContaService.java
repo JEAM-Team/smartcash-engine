@@ -50,6 +50,7 @@ public class ContaService {
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        var conta = findById(id);
+        repository.delete(conta);
     }
 }

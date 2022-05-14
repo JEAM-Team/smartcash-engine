@@ -1,5 +1,6 @@
 package com.smartcash.engine.controllers;
 
+import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Produto;
 import com.smartcash.engine.models.dtos.EditProduto;
 import com.smartcash.engine.models.dtos.ProdutoPost;
@@ -25,9 +26,9 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> findAll() {
-        List<Produto> produtos = service.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(produtos);
+    public ResponseEntity<List<?>> findAll() {
+        var produtos = service.findAll();
+        return ResponseHelper.listResponse(produtos);
     }
 
     @GetMapping("/{id}")
@@ -43,9 +44,9 @@ public class ProdutoController {
     }
 
     @GetMapping("/carteira")
-    public ResponseEntity<List<Produto>> listProdutoByCarteira(@PathVariable Long carteiraId) {
-        List<Produto> produtos = service.findByCarteiraId(carteiraId);
-        return ResponseEntity.status(HttpStatus.OK).body(produtos);
+    public ResponseEntity<List<?>> listProdutoByCarteira(@PathVariable Long carteiraId) {
+        var produtos = service.findByCarteiraId(carteiraId);
+        return ResponseHelper.listResponse(produtos);
     }
 
     @DeleteMapping("/{id}")

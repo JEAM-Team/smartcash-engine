@@ -1,5 +1,6 @@
 package com.smartcash.engine.controllers;
 
+import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Nota;
 import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
@@ -27,9 +28,9 @@ public class NotaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Nota>> findAll() {
+    public ResponseEntity<List<?>> findAll() {
         var notas = service.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(notas);
+        return ResponseHelper.listResponse(notas);
     }
 
     @GetMapping("/{id}")
@@ -39,9 +40,9 @@ public class NotaController {
     }
 
     @GetMapping("/conta/{contaId}")
-    public ResponseEntity<List<Nota>> findByContaId(@PathVariable Long contaId) {
-        var nota = service.findByContaId(contaId);
-        return ResponseEntity.status(HttpStatus.OK).body(nota);
+    public ResponseEntity<List<?>> findByContaId(@PathVariable Long contaId) {
+        var notas = service.findByContaId(contaId);
+        return ResponseHelper.listResponse(notas);
     }
 
     @PutMapping("/{id}")

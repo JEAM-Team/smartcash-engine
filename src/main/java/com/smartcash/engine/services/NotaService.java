@@ -66,7 +66,8 @@ public class NotaService {
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
+        var nota = findById(id);
+        repository.delete(nota);
     }
 
     public List<Nota> findByContaId(Long contaId) {

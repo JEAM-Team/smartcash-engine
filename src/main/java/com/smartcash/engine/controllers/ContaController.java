@@ -1,5 +1,6 @@
 package com.smartcash.engine.controllers;
 
+import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.dtos.ContaDTO;
@@ -27,9 +28,9 @@ public class ContaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Conta>> findAll() {
-        List<Conta> contas = service.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(contas);
+    public ResponseEntity<List<?>> findAll() {
+        var contas = service.findAll();
+        return ResponseHelper.listResponse(contas);
     }
 
     @GetMapping("/{id}")
@@ -38,9 +39,9 @@ public class ContaController {
         return ResponseEntity.status(HttpStatus.OK).body(conta);
     }
     @GetMapping("/carteira")
-    public ResponseEntity<List<Conta>> listContaByCarteira(@PathVariable Long carteiraId) {
-        List<Conta> contas = service.findByCarteiraId(carteiraId);
-        return ResponseEntity.status(HttpStatus.OK).body(contas);
+    public ResponseEntity<List<?>> listContaByCarteira(@PathVariable Long carteiraId) {
+        var contas = service.findByCarteiraId(carteiraId);
+        return ResponseHelper.listResponse(contas);
     }
 
     @PutMapping("/{id}")

@@ -1,11 +1,15 @@
 package com.smartcash.engine.services;
 
 import br.com.caelum.stella.validation.CPFValidator;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.smartcash.engine.exceptions.usuario.CamposInvalidosException;
 import com.smartcash.engine.exceptions.usuario.EmailDuplicadoException;
 import com.smartcash.engine.models.data.UsuarioDetails;
 import com.smartcash.engine.models.domain.Usuario;
+import com.smartcash.engine.models.dtos.ContaComercialPost;
 import com.smartcash.engine.models.dtos.UsuarioDTO;
+import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +40,9 @@ public class UsuarioService implements UserDetailsService {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private Gson gson;
+
     private final CPFValidator cpfValidator = new CPFValidator();
 
     @Override
@@ -54,7 +61,7 @@ public class UsuarioService implements UserDetailsService {
         validacaoCadastro(dto);
         var usuario = new Usuario();
         BeanUtils.copyProperties(dto, usuario, "id, carteira, senha");
-        usuario.setCarteiras(Collections.singletonList(carteiraService.save()));
+        usuario.setCarteiras(Collections.singletonList(carteiraService.save(TipoCarteira.PESSOAL)));
         usuario.setSenha(encoder.encode(dto.senha()));
         usuarioRepository.save(usuario);
     }
@@ -66,6 +73,13 @@ public class UsuarioService implements UserDetailsService {
     public void update(String email, UsuarioDTO dto) {
         var usuario = getByEmail(email);
         BeanUtils.copyProperties(dto, usuario, "id, carteira, cpf");
+        usuarioRepository.save(usuario);
+    }
+
+    public void update(ContaComercialPost contaComercial) {
+        var usuario = getByEmail(contaComercial.email());
+        var carteira = carteiraService.save(TipoCarteira.COMERCIAL);
+        usuario.getCarteiras().add(carteira);
         usuarioRepository.save(usuario);
     }
 
