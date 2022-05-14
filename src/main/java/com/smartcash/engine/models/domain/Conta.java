@@ -1,5 +1,9 @@
 package com.smartcash.engine.models.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartcash.engine.models.enums.TipoConta;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -15,7 +19,10 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Conta {
 
 	@Id
@@ -29,14 +36,17 @@ public class Conta {
 	@Min(0)
 	private Double valorTotal;
 
-	@NotNull
-	private TipoConta tipoConta;
+	@JsonProperty("tipo_conta")
+	private TipoConta tipo;
 
 	@ManyToOne
 	@JoinColumn(name = "carteira_id")
+	@JsonBackReference
 	private Carteira carteira;
 
 	@OneToMany(mappedBy = "conta")
+	@JsonManagedReference
+	@ToString.Exclude
 	private List<Nota> notas;
 
 	@Override

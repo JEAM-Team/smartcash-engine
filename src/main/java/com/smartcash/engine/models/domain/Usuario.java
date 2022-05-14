@@ -1,6 +1,7 @@
 package com.smartcash.engine.models.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -40,6 +42,7 @@ public class Usuario {
     @OneToMany
     @JoinColumn(name = "carteira_id")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Carteira> carteiras;
 
     @Override

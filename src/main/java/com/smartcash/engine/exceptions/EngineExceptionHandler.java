@@ -1,5 +1,6 @@
 package com.smartcash.engine.exceptions;
 
+import br.com.caelum.stella.validation.InvalidStateException;
 import com.smartcash.engine.exceptions.carteira.BadRequestException;
 import com.smartcash.engine.exceptions.usuario.CamposInvalidosException;
 import com.smartcash.engine.exceptions.usuario.ErrorEntity;
@@ -14,6 +15,11 @@ public class EngineExceptionHandler {
 
     @ExceptionHandler(CamposInvalidosException.class)
     public ResponseEntity<ErrorEntity> badRequestException(BadRequestException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimentoPreencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimento. Preencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));
+    }
+
+    @ExceptionHandler(InvalidStateException.class)
+    public ResponseEntity<ErrorEntity> invalidStateException(InvalidStateException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Ocorreu um erro ao processar a sua solicitação.", e.getMessage(), DateTimeHelper.brazilianTime()));
     }
 }
