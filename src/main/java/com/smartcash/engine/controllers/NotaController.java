@@ -2,6 +2,7 @@ package com.smartcash.engine.controllers;
 
 import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.CalculaResultadoDto;
 import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
 import com.smartcash.engine.services.NotaService;
