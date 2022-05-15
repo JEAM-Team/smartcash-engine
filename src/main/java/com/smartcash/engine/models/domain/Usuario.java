@@ -1,10 +1,12 @@
 package com.smartcash.engine.models.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,6 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,19 +24,25 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nome;
 
+    @NotBlank
     private String sobrenome;
 
+    @NotBlank
     private String cpf;
 
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String senha;
 
     @OneToMany
     @JoinColumn(name = "carteira_id")
     @ToString.Exclude
+    @JsonManagedReference
     private List<Carteira> carteiras;
 
     @Override

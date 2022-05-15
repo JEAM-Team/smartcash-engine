@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartcash.engine.models.data.UsuarioDetails;
 import com.smartcash.engine.models.domain.Usuario;
+import com.smartcash.engine.models.dtos.UsuarioDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,11 +36,11 @@ public class JwtAuthFilter extends UsernamePasswordAuthenticationFilter {
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
             var usuario = new ObjectMapper()
-                    .readValue(request.getInputStream(), Usuario.class);
+                    .readValue(request.getInputStream(), UsuarioDTO.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    usuario.getEmail(),
-                    usuario.getSenha(),
+                    usuario.email(),
+                    usuario.senha(),
                     new ArrayList<>()
             ));
 

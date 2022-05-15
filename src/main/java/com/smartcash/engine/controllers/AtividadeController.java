@@ -1,5 +1,6 @@
 package com.smartcash.engine.controllers;
 
+import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.services.AtividadeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class AtividadeController {
     @Autowired
     AtividadeService service;
 
-    @GetMapping("/{carteiraId}")
-    public ResponseEntity<List<Atividade>> listAtividadeByCarteira(@PathVariable Long carteiraId) {
-        List<Atividade> atividades = service.findByCarteiraId(carteiraId);
-        return ResponseEntity.status(HttpStatus.OK).body(atividades);
+    @GetMapping("/{carteira_id}")
+    public ResponseEntity<List<?>> listAtividadeByCarteira(@PathVariable(name = "carteira_id") Long carteiraId) {
+        var atividades = service.findByCarteiraId(carteiraId);
+        return ResponseHelper.listResponse(atividades);
     }
 }

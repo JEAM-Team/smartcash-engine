@@ -1,8 +1,9 @@
 package com.smartcash.engine.controllers;
 
-import com.smartcash.engine.models.domain.Conta;
+import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Produto;
-import com.smartcash.engine.models.dtos.ProdutoDto;
+import com.smartcash.engine.models.dtos.EditProduto;
+import com.smartcash.engine.models.dtos.ProdutoPost;
 import com.smartcash.engine.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/produto")
@@ -21,32 +21,32 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody Produto produto) {
+    public void create(@RequestBody ProdutoPost produto) {
         service.create(produto);
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoDto>> findAll() {
-        List<ProdutoDto> produtos = service.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(produtos);
+    public ResponseEntity<List<?>> findAll() {
+        var produtos = service.findAll();
+        return ResponseHelper.listResponse(produtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Produto>> findById(@PathVariable Long id) {
-        Optional<Produto> produto = service.findById(id);
+    public ResponseEntity<Produto> findById(@PathVariable Long id) {
+        Produto produto = service.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(produto);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Long id, @RequestBody Produto produto) {
+    public void update(@PathVariable Long id, @RequestBody EditProduto produto) {
         service.update(id, produto);
     }
 
     @GetMapping("/carteira")
-    public ResponseEntity<List<Produto>> listProdutoByCarteira(@PathVariable Long carteiraId) {
-        List<Produto> produtos = service.findByCarteiraId(carteiraId);
-        return ResponseEntity.status(HttpStatus.OK).body(produtos);
+    public ResponseEntity<List<?>> listProdutoByCarteira(@PathVariable Long carteiraId) {
+        var produtos = service.findByCarteiraId(carteiraId);
+        return ResponseHelper.listResponse(produtos);
     }
 
     @DeleteMapping("/{id}")
