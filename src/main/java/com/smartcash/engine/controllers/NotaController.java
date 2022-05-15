@@ -56,4 +56,10 @@ public class NotaController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+    @GetMapping("/total")
+    @ResponseStatus(HttpStatus.OK)
+    public CalculaResultadoDto getTotal() {
+        return service.calculaTotal();
+    }
 }
