@@ -3,6 +3,7 @@ package com.smartcash.engine.services;
 import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.models.domain.Produto;
 import com.smartcash.engine.models.dtos.EditProduto;
+import com.smartcash.engine.models.dtos.ProdutoDto;
 import com.smartcash.engine.models.dtos.ProdutoPost;
 import com.smartcash.engine.repository.ProdutoRepository;
 import org.springframework.beans.BeanUtils;

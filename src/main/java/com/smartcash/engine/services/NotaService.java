@@ -3,8 +3,10 @@ package com.smartcash.engine.services;
 import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.dtos.CalculaResultadoDto;
 import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
+import com.smartcash.engine.models.dtos.NotaDto;
 import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.BeanUtils;
@@ -91,12 +93,13 @@ public class NotaService {
             LocalDate data = nota.getData();
             for (int i = 1; i < nota.getQtdVezes(); i++) {
                 Nota notaRepeticao = Nota.builder().titulo(nota.getTitulo()).valor(nota.getValor()).repeticao(true)
-                        .data(data.plusDays(30L *i)).tipo(nota.getTipo()).tag(nota.getTag())
+                        .data(data.plusDays(30L * i)).tipo(nota.getTipo()).tag(nota.getTag())
                         .produto(nota.getProduto()).conta(nota.getConta()).carteira(nota.getCarteira()).build();
                 atividadeService.create(Atividade.builder().nota(notaRepeticao).carteira(nota.getCarteira()).build());
                 repository.save(notaRepeticao);
             }
         }
+    }
 
     public CalculaResultadoDto calculaTotal() {
         List<Nota> notas = repository.findAll();
