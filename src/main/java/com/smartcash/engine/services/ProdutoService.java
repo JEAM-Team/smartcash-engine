@@ -3,8 +3,8 @@ package com.smartcash.engine.services;
 import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.models.domain.Produto;
 import com.smartcash.engine.models.dtos.EditProduto;
-import com.smartcash.engine.models.dtos.ProdutoDto;
 import com.smartcash.engine.models.dtos.ProdutoPost;
+import com.smartcash.engine.models.dtos.ProdutoView;
 import com.smartcash.engine.repository.ProdutoRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,15 @@ public class ProdutoService {
         repository.save(produto);
     }
 
-    public List<ProdutoDto> findAll() {
-        List<Produto> produtos = repository.findAll();
-        List<ProdutoDto> produtoDtos = new ArrayList<>();
+    public List<ProdutoView> findAll() {
+        var produtos = repository.findAll();
+        var produtoDtos = new ArrayList<ProdutoView>();
         produtos.forEach(produto -> {
-            ProdutoDto produtoDto = new ProdutoDto();
-            produtoDto.setNome(produto.getNome());
-            produtoDto.setValor(produto.getValor());
-            produtoDto.setCodigo(produto.getCodigo());
+            var produtoDto = ProdutoView.builder()
+                    .nome(produto.getNome())
+                    .valor(produto.getValor())
+                    .codigo(produto.getCodigo())
+                    .build();
             produtoDtos.add(produtoDto);
         });
         return produtoDtos;

@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +42,8 @@ public class NotaController {
     }
 
     @GetMapping("/conta/{contaId}")
-    public ResponseEntity<List<?>> findByContaId(@PathVariable Long contaId) {
-        var notas = service.findByContaId(contaId);
+    public ResponseEntity<List<?>> findByContaId(@PathVariable Long contaId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
+        var notas = service.findByContaId(contaId, start, end);
         return ResponseHelper.listResponse(notas);
     }
 

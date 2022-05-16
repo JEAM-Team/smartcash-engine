@@ -2,14 +2,15 @@ package com.smartcash.engine.services;
 
 import br.com.caelum.stella.validation.CPFValidator;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.smartcash.engine.exceptions.usuario.CamposInvalidosException;
 import com.smartcash.engine.exceptions.usuario.EmailDuplicadoException;
 import com.smartcash.engine.models.data.UsuarioDetails;
+import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.domain.Usuario;
 import com.smartcash.engine.models.dtos.ContaComercialPost;
 import com.smartcash.engine.models.dtos.UsuarioDTO;
 import com.smartcash.engine.models.enums.TipoCarteira;
+import com.smartcash.engine.models.enums.TipoConta;
 import com.smartcash.engine.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +31,9 @@ public class UsuarioService implements UserDetailsService {
 
     @Autowired
     private CarteiraService carteiraService;
+
+    @Autowired
+    private ContaService contaService;
 
     @Autowired
     private MessageSource ms;
@@ -61,7 +65,7 @@ public class UsuarioService implements UserDetailsService {
         validacaoCadastro(dto);
         var usuario = new Usuario();
         BeanUtils.copyProperties(dto, usuario, "id, carteira, senha");
-        usuario.setCarteiras(Collections.singletonList(carteiraService.save(TipoCarteira.PESSOAL)));
+        usuario.setCarteiras(Collections.singletonList(carteiraService.save(TipoCarteira.PESSOAL, contaService.createDefault())));
         usuario.setSenha(encoder.encode(dto.senha()));
         usuarioRepository.save(usuario);
     }
@@ -78,7 +82,7 @@ public class UsuarioService implements UserDetailsService {
 
     public void update(ContaComercialPost contaComercial) {
         var usuario = getByEmail(contaComercial.email());
-        var carteira = carteiraService.save(TipoCarteira.COMERCIAL);
+        var carteira = carteiraService.save(TipoCarteira.COMERCIAL, contaService.createDefault());
         usuario.getCarteiras().add(carteira);
         usuarioRepository.save(usuario);
     }

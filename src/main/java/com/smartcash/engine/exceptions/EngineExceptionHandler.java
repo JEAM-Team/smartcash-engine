@@ -18,6 +18,11 @@ public class EngineExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimento. Preencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorEntity> illegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimento. Preencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));
+    }
+
     @ExceptionHandler(InvalidStateException.class)
     public ResponseEntity<ErrorEntity> invalidStateException(InvalidStateException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Ocorreu um erro ao processar a sua solicitação.", e.getMessage(), DateTimeHelper.brazilianTime()));
