@@ -2,8 +2,11 @@ package com.smartcash.engine.services;
 
 import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.exceptions.carteira.BadRequestException;
+import com.smartcash.engine.models.domain.Carteira;
 import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.dtos.ContaDTO;
+import com.smartcash.engine.models.enums.TipoCarteira;
+import com.smartcash.engine.models.enums.TipoConta;
 import com.smartcash.engine.repository.ContaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,11 @@ public class ContaService {
         BeanUtils.copyProperties(dto, conta, "carteiraId");
         conta.setCarteira(carteira);
         repository.save(conta);
+    }
+
+    public Conta createDefault() {
+        var conta = Conta.builder().tipo(TipoConta.DN).nome("Conta Padrão").valorTotal(0.0).build();
+        return repository.save(conta);
     }
 
     public List<Conta> findAll() {

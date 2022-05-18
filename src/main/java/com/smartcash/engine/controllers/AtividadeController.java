@@ -6,11 +6,9 @@ import com.smartcash.engine.services.AtividadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,8 +19,8 @@ public class AtividadeController {
     AtividadeService service;
 
     @GetMapping("/{carteira_id}")
-    public ResponseEntity<List<?>> listAtividadeByCarteira(@PathVariable(name = "carteira_id") Long carteiraId) {
-        var atividades = service.findByCarteiraId(carteiraId);
+    public ResponseEntity<List<?>> listAtividadeByCarteira(@PathVariable(name = "carteira_id") Long carteiraId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
+        var atividades = service.findByCarteiraId(carteiraId, start, end);
         return ResponseHelper.listResponse(atividades);
     }
 }
