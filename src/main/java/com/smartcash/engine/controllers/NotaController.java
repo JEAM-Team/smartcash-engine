@@ -64,7 +64,7 @@ public class NotaController {
 
     @GetMapping("/total")
     @ResponseStatus(HttpStatus.OK)
-    public CalculaResultadoDto getTotal(@RequestParam("saldo_pessoal") Boolean saldoPessoal, @RequestParam("saldo_comercial") Boolean saldoComercial, @RequestParam("pagamento_pessoal") Boolean pagamentoPessoal, @RequestParam("pagamento_comercial") Boolean pagamentoComercial, @RequestHeader String email) {
+    public CalculaResultadoDto getTotal(@RequestParam(required = false, name = "saldo_pessoal") Boolean saldoPessoal, @RequestParam(required = false, name = "saldo_comercial") Boolean saldoComercial, @RequestParam(required = false, name = "pagamento_pessoal") Boolean pagamentoPessoal, @RequestParam(required = false, name = "pagamento_comercial") Boolean pagamentoComercial, @RequestHeader String email) {
         return service.calculaTotal(saldoPessoal, saldoComercial, pagamentoPessoal, pagamentoComercial, email);
     }
 }
