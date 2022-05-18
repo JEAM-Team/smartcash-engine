@@ -1,5 +1,6 @@
 package com.smartcash.engine.models.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -26,6 +27,7 @@ public class Atividade {
 	private Nota nota;
 
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "carteira_id")
 	private Carteira carteira;
 
