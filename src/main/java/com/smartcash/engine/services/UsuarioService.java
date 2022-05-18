@@ -90,7 +90,7 @@ public class UsuarioService implements UserDetailsService {
     public void validacaoCadastro(UsuarioDTO dto) {
         boolean isBlank = dto.nome().isBlank() || dto.sobrenome().isBlank() || dto.email().isBlank() || dto.senha().isBlank() || dto.cpf().isBlank();
         if (isBlank)
-            throw new CamposInvalidosException("");
+            throw new CamposInvalidosException("Existem campos sem preenchimento.");
         cpfValidator.assertValid(dto.cpf());
     }
 }

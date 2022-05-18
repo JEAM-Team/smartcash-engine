@@ -1,22 +1,23 @@
 package com.smartcash.engine.services;
 
 import com.smartcash.engine.exceptions.NotFoundException;
+import com.smartcash.engine.exceptions.carteira.BadRequestException;
 import com.smartcash.engine.models.domain.Atividade;
 import com.smartcash.engine.models.domain.Nota;
-import com.smartcash.engine.models.dtos.CalculaResultadoDto;
-import com.smartcash.engine.models.dtos.EditNota;
-import com.smartcash.engine.models.dtos.NotaDTO;
-import com.smartcash.engine.models.dtos.NotaView;
+import com.smartcash.engine.models.dtos.*;
 import com.smartcash.engine.models.enums.TipoCarteira;
+import com.smartcash.engine.models.enums.TipoNota;
 import com.smartcash.engine.repository.NotaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class NotaService {
@@ -38,6 +39,9 @@ public class NotaService {
 
     @Autowired
     private CarteiraService carteiraService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     public void create(NotaDTO dto) {
         var tag = dto.tagId() != null ? tagService.findById(dto.tagId()) : null;
@@ -103,17 +107,48 @@ public class NotaService {
         }
     }
 
-    public CalculaResultadoDto calculaTotal() {
-        var notas = repository.findAll();
-        Double recebimento = 0.0;
-        Double pagamento = 0.0;
-        for (Nota nota : notas) {
-            switch (nota.getTipo()) {
-                case PAGAMENTO -> pagamento += nota.getValor();
-                case RECEBIMENTO -> recebimento += nota.getValor();
+    public CalculaResultadoDto calculaTotal(Boolean saldoPessoal, Boolean saldoComercial, Boolean pagamentoPessoal, Boolean pagamentoComercial, String email) {
+
+        var pessoal = !saldoPessoal && !pagamentoPessoal ? null : new NotaTotalFilter(TipoCarteira.PESSOAL, saldoPessoal, pagamentoPessoal);
+        var comercial = !saldoComercial && !pagamentoComercial ? null : new NotaTotalFilter(TipoCarteira.COMERCIAL, saldoComercial, pagamentoComercial);
+
+        if (ObjectUtils.isEmpty(pessoal) && ObjectUtils.isEmpty(comercial)) {
+            throw new BadRequestException("Informe ao menos um tipo de nota para realizar a busca.");
+        }
+
+        NotaTotal notaTotalPessoal = null;
+        NotaTotal notaTotalComercial = null;
+
+        for (NotaTotalFilter filter : Arrays.asList(pessoal, comercial)) {
+            if (ObjectUtils.isEmpty(filter)) {
+                continue;
+            }
+
+            var totalSaldo = new AtomicReference<>(0.0);
+            var totalPagamento = new AtomicReference<>(0.0);
+
+            var usuario = usuarioService.getByEmail(email);
+            var contas = usuario.getCarteiras().stream()
+                    .filter(carteira -> carteira.getTipo().equals(filter.tipoCarteira()))
+                    .toList().get(0).getContas();
+
+            if (filter.saldo()) {
+                contas.forEach(conta -> totalSaldo.updateAndGet(v -> v + conta.getValorTotal()));
+            }
+            if (filter.pagamento()) {
+                contas.forEach(conta -> conta.getNotas().stream()
+                        .filter(nota -> nota.getTipo().equals(TipoNota.PAGAMENTO))
+                        .filter(nota -> nota.getData().compareTo(LocalDate.now()) >= 0)
+                        .forEach(nota -> totalPagamento.updateAndGet(v -> v + nota.getValor()))
+                );
+            }
+            switch (filter.tipoCarteira()) {
+                case PESSOAL ->
+                        notaTotalPessoal = new NotaTotal(TipoCarteira.PESSOAL, totalSaldo.get(), totalPagamento.get());
+                case COMERCIAL ->
+                        notaTotalComercial = new NotaTotal(TipoCarteira.COMERCIAL, totalSaldo.get(), totalPagamento.get());
             }
         }
-        return CalculaResultadoDto.builder().totalPagamento(pagamento).totalRecebimento(recebimento).build();
-
+        return new CalculaResultadoDto(notaTotalPessoal, notaTotalComercial);
     }
 }

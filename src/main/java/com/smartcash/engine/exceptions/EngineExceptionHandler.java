@@ -18,6 +18,11 @@ public class EngineExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimento. Preencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorEntity> notFoundException(NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimento. Preencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorEntity> illegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("Campos com problemas no preenchimento. Preencha todos os campos corretamente", e.getMessage(), DateTimeHelper.brazilianTime()));

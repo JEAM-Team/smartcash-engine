@@ -1,10 +1,13 @@
 package com.smartcash.engine.controllers;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Nota;
 import com.smartcash.engine.models.dtos.CalculaResultadoDto;
 import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
+import com.smartcash.engine.models.dtos.NotaTotalFilter;
+import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +64,7 @@ public class NotaController {
 
     @GetMapping("/total")
     @ResponseStatus(HttpStatus.OK)
-    public CalculaResultadoDto getTotal() {
-        return service.calculaTotal();
+    public CalculaResultadoDto getTotal(@RequestParam("saldo_pessoal") Boolean saldoPessoal, @RequestParam("saldo_comercial") Boolean saldoComercial, @RequestParam("pagamento_pessoal") Boolean pagamentoPessoal, @RequestParam("pagamento_comercial") Boolean pagamentoComercial, @RequestHeader String email) {
+        return service.calculaTotal(saldoPessoal, saldoComercial, pagamentoPessoal, pagamentoComercial, email);
     }
 }
