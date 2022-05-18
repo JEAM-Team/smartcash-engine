@@ -108,9 +108,12 @@ public class NotaService {
     }
 
     public CalculaResultadoDto calculaTotal(Boolean saldoPessoal, Boolean saldoComercial, Boolean pagamentoPessoal, Boolean pagamentoComercial, String email) {
-
-        var pessoal = !saldoPessoal && !pagamentoPessoal ? null : new NotaTotalFilter(TipoCarteira.PESSOAL, saldoPessoal, pagamentoPessoal);
-        var comercial = !saldoComercial && !pagamentoComercial ? null : new NotaTotalFilter(TipoCarteira.COMERCIAL, saldoComercial, pagamentoComercial);
+        var allNull = saldoPessoal == null && saldoComercial == null && pagamentoPessoal == null && pagamentoComercial == null;
+        if (allNull) {
+            throw new BadRequestException("Informe ao menos um tipo de nota para realizar a busca.");
+        }
+        var pessoal = Boolean.FALSE.equals(saldoPessoal) && Boolean.FALSE.equals(pagamentoPessoal) ? null : new NotaTotalFilter(TipoCarteira.PESSOAL, saldoPessoal, pagamentoPessoal);
+        var comercial = Boolean.FALSE.equals(saldoComercial) && Boolean.FALSE.equals(pagamentoComercial) ? null : new NotaTotalFilter(TipoCarteira.COMERCIAL, saldoComercial, pagamentoComercial);
 
         if (ObjectUtils.isEmpty(pessoal) && ObjectUtils.isEmpty(comercial)) {
             throw new BadRequestException("Informe ao menos um tipo de nota para realizar a busca.");
@@ -120,14 +123,14 @@ public class NotaService {
         NotaTotal notaTotalComercial = null;
 
         for (NotaTotalFilter filter : Arrays.asList(pessoal, comercial)) {
-            if (ObjectUtils.isEmpty(filter)) {
+            var usuario = usuarioService.getByEmail(email);
+            if (ObjectUtils.isEmpty(filter) || filter.tipoCarteira().equals(TipoCarteira.COMERCIAL) && usuario.getCarteiras().size() == 1) {
                 continue;
             }
 
             var totalSaldo = new AtomicReference<>(0.0);
             var totalPagamento = new AtomicReference<>(0.0);
 
-            var usuario = usuarioService.getByEmail(email);
             var contas = usuario.getCarteiras().stream()
                     .filter(carteira -> carteira.getTipo().equals(filter.tipoCarteira()))
                     .toList().get(0).getContas();
@@ -150,5 +153,8 @@ public class NotaService {
             }
         }
         return new CalculaResultadoDto(notaTotalPessoal, notaTotalComercial);
+    }
+    public boolean convertToFalse(Boolean campo){
+        return null != campo && campo;
     }
 }
