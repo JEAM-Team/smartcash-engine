@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Carteira;
 import com.smartcash.engine.models.dtos.ContaComercialPost;
+import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.services.CarteiraService;
 import com.smartcash.engine.services.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,12 @@ public class CarteiraController {
     public ResponseEntity<Carteira> findById(@PathVariable Long id) {
         var carteiras = service.findById(id);
         return ResponseEntity.ok(carteiras);
+    }
+
+    @GetMapping("/busca")
+    public ResponseEntity<List<?>> findContasByEmail(@RequestHeader String email, @RequestParam(required = false) TipoCarteira tipo) {
+        var carteiras = usuarioService.findContasByEmail(email, tipo);
+        return ResponseHelper.listResponse(carteiras);
     }
 
 }
