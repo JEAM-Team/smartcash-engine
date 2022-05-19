@@ -1,13 +1,12 @@
 package com.smartcash.engine.controllers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartcash.engine.helpers.ResponseHelper;
 import com.smartcash.engine.models.domain.Nota;
 import com.smartcash.engine.models.dtos.CalculaResultadoDto;
 import com.smartcash.engine.models.dtos.EditNota;
 import com.smartcash.engine.models.dtos.NotaDTO;
-import com.smartcash.engine.models.dtos.NotaTotalFilter;
 import com.smartcash.engine.models.enums.TipoCarteira;
+import com.smartcash.engine.models.enums.TipoNota;
 import com.smartcash.engine.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/nota")
@@ -47,6 +45,12 @@ public class NotaController {
     @GetMapping("/conta/{contaId}")
     public ResponseEntity<List<?>> findByContaId(@PathVariable Long contaId, @RequestParam LocalDate start, @RequestParam LocalDate end) {
         var notas = service.findByContaId(contaId, start, end);
+        return ResponseHelper.listResponse(notas);
+    }
+
+    @GetMapping("/busca")
+    public ResponseEntity<List<?>> findByTipo(@RequestHeader String email, @RequestParam("tipo_carteira") TipoCarteira tipoCarteira, @RequestParam("tipo_nota") TipoNota tipoNota) {
+        var notas = service.findByTipoNota(email, tipoCarteira, tipoNota);
         return ResponseHelper.listResponse(notas);
     }
 
