@@ -16,10 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 public class NotaService {
@@ -161,9 +160,17 @@ public class NotaService {
     public List<Nota> findByTipoNota(String email, TipoCarteira tipoCarteira, TipoNota tipoNota) {
         var usuario = usuarioService.getByEmail(email);
         var contas = filtrarContasPorTipoCarteira(usuario, tipoCarteira);
-        var notas = new ArrayList<Nota>();
-        contas.forEach(conta -> conta.getNotas().stream().filter(nota -> nota.getTipo().equals(tipoNota)).forEach(notas::add));
-        return notas;
+        var notas = contas.stream()
+                .map(conta -> conta.getNotas().stream()
+                        .filter(nota -> nota.getTipo().equals(tipoNota))
+                        .sorted(Comparator.comparing(Nota::getData).reversed())
+                        .collect(Collectors.toList()))
+                .findFirst();
+        if (notas.isEmpty()){
+            throw new NotFoundException("Não foi encontrado nem uma nota para este usuário.");
+        }
+        return notas.get();
+
     }
 
     public List<Conta> filtrarContasPorTipoCarteira(Usuario usuario, TipoCarteira tipo){
