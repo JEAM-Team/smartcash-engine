@@ -5,12 +5,11 @@ import com.google.gson.Gson;
 import com.smartcash.engine.exceptions.usuario.CamposInvalidosException;
 import com.smartcash.engine.exceptions.usuario.EmailDuplicadoException;
 import com.smartcash.engine.models.data.UsuarioDetails;
-import com.smartcash.engine.models.domain.Conta;
+import com.smartcash.engine.models.domain.Carteira;
 import com.smartcash.engine.models.domain.Usuario;
 import com.smartcash.engine.models.dtos.ContaComercialPost;
 import com.smartcash.engine.models.dtos.UsuarioDTO;
 import com.smartcash.engine.models.enums.TipoCarteira;
-import com.smartcash.engine.models.enums.TipoConta;
 import com.smartcash.engine.repository.UsuarioRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -23,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -92,5 +93,10 @@ public class UsuarioService implements UserDetailsService {
         if (isBlank)
             throw new CamposInvalidosException("Existem campos sem preenchimento.");
         cpfValidator.assertValid(dto.cpf());
+    }
+
+    public List<Carteira> findContasByEmail(String email, TipoCarteira tipo) {
+        var usuario = getByEmail(email);
+        return null != tipo ? usuario.getCarteiras().stream().filter(carteira -> carteira.getTipo().equals(tipo)).collect(Collectors.toList()) : usuario.getCarteiras();
     }
 }
