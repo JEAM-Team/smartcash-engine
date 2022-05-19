@@ -3,7 +3,9 @@ package com.smartcash.engine.services;
 import com.smartcash.engine.exceptions.NotFoundException;
 import com.smartcash.engine.exceptions.carteira.BadRequestException;
 import com.smartcash.engine.models.domain.Atividade;
+import com.smartcash.engine.models.domain.Conta;
 import com.smartcash.engine.models.domain.Nota;
+import com.smartcash.engine.models.domain.Usuario;
 import com.smartcash.engine.models.dtos.*;
 import com.smartcash.engine.models.enums.TipoCarteira;
 import com.smartcash.engine.models.enums.TipoNota;
@@ -131,9 +133,7 @@ public class NotaService {
             var totalSaldo = new AtomicReference<>(0.0);
             var totalPagamento = new AtomicReference<>(0.0);
 
-            var contas = usuario.getCarteiras().stream()
-                    .filter(carteira -> carteira.getTipo().equals(filter.tipoCarteira()))
-                    .toList().get(0).getContas();
+            var contas = filtrarContasPorTipoCarteira(usuario, filter.tipoCarteira());
 
             if (filter.saldo()) {
                 contas.forEach(conta -> totalSaldo.updateAndGet(v -> v + conta.getValorTotal()));
@@ -156,5 +156,19 @@ public class NotaService {
     }
     public boolean convertToFalse(Boolean campo){
         return null != campo && campo;
+    }
+
+    public List<Nota> findByTipoNota(String email, TipoCarteira tipoCarteira, TipoNota tipoNota) {
+        var usuario = usuarioService.getByEmail(email);
+        var contas = filtrarContasPorTipoCarteira(usuario, tipoCarteira);
+        var notas = new ArrayList<Nota>();
+        contas.forEach(conta -> conta.getNotas().stream().filter(nota -> nota.getTipo().equals(tipoNota)).forEach(notas::add));
+        return notas;
+    }
+
+    public List<Conta> filtrarContasPorTipoCarteira(Usuario usuario, TipoCarteira tipo){
+        return usuario.getCarteiras().stream()
+                .filter(carteira -> carteira.getTipo().equals(tipo))
+                .toList().get(0).getContas();
     }
 }
