@@ -1,5 +1,6 @@
 package com.smartcash.engine.models.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.smartcash.engine.models.enums.TipoCarteira;
@@ -33,6 +34,11 @@ public class Carteira {
 	@JsonManagedReference
 	@ToString.Exclude
 	private List<Conta> contas;
+
+	@OneToMany(mappedBy = "carteira")
+	@JsonManagedReference
+	@ToString.Exclude
+	private List<Tag> tags;
 
 	@Override
 	public boolean equals(Object o) {
