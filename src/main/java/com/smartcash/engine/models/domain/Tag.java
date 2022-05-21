@@ -1,5 +1,6 @@
 package com.smartcash.engine.models.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
@@ -22,5 +23,10 @@ public class Tag {
 
 	@NotBlank
 	private String titulo;
+
+	@ManyToOne
+	@JsonBackReference
+	@JoinColumn(name = "carteira_id")
+	private Carteira carteira;
 
 }
