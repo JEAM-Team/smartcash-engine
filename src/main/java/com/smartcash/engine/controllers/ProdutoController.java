@@ -43,8 +43,8 @@ public class ProdutoController {
         service.update(id, produto);
     }
 
-    @GetMapping("/carteira")
-    public ResponseEntity<List<?>> listProdutoByCarteira(@PathVariable Long carteiraId) {
+    @GetMapping("/carteira/{carteira_id}")
+    public ResponseEntity<List<?>> listProdutoByCarteira(@PathVariable("carteira_id") Long carteiraId) {
         var produtos = service.findByCarteiraId(carteiraId);
         return ResponseHelper.listResponse(produtos);
     }
