@@ -19,10 +19,9 @@ public class CarteiraService {
     @Autowired
     private CarteiraRepository repository;
 
-    public Carteira save(TipoCarteira tipo, Conta conta){
+    public Carteira save(TipoCarteira tipo){
         var carteira = Carteira.builder()
                 .tipo(tipo)
-                .contas(Collections.singletonList(conta))
                 .build();
         return create(carteira);
     }
