@@ -36,8 +36,8 @@ public class ContaService {
         repository.save(conta);
     }
 
-    public Conta createDefault() {
-        var conta = Conta.builder().tipo(TipoConta.DN).nome("Conta Padrão").valorTotal(0.0).build();
+    public Conta createDefault(Carteira carteira) {
+        var conta = Conta.builder().tipo(TipoConta.DN).nome("Conta Padrão").valorTotal(0.0).carteira(carteira).build();
         return repository.save(conta);
     }
 

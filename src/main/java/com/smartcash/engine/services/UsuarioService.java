@@ -66,7 +66,9 @@ public class UsuarioService implements UserDetailsService {
         validacaoCadastro(dto);
         var usuario = new Usuario();
         BeanUtils.copyProperties(dto, usuario, "id, carteira, senha");
-        usuario.setCarteiras(Collections.singletonList(carteiraService.save(TipoCarteira.PESSOAL, contaService.createDefault())));
+        var carteira = carteiraService.save(TipoCarteira.PESSOAL);
+        contaService.createDefault(carteira);
+        usuario.setCarteiras(Collections.singletonList(carteira));
         usuario.setSenha(encoder.encode(dto.senha()));
         usuarioRepository.save(usuario);
     }
@@ -83,7 +85,8 @@ public class UsuarioService implements UserDetailsService {
 
     public void update(ContaComercialPost contaComercial) {
         var usuario = getByEmail(contaComercial.email());
-        var carteira = carteiraService.save(TipoCarteira.COMERCIAL, contaService.createDefault());
+        var carteira = carteiraService.save(TipoCarteira.COMERCIAL);
+        contaService.createDefault(carteira);
         usuario.getCarteiras().add(carteira);
         usuarioRepository.save(usuario);
     }
