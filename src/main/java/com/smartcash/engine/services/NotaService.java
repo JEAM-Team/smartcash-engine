@@ -16,7 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -51,6 +54,9 @@ public class NotaService {
         if (carteira.getTipo().equals(TipoCarteira.COMERCIAL) && dto.produtoId() != null)
             nota.setProduto(produtoService.findById(dto.produtoId()));
         var conta = contaService.findById(dto.contaId());
+        if (dto.tipo().equals(TipoNota.RECEBIMENTO)) {
+            conta.setValorTotal(conta.getValorTotal() + dto.valor());
+        }
 
         BeanUtils.copyProperties(dto, nota, "id", "tagId", "contaId", "carteiraId", "produtoId");
         nota.setTag(tag);
@@ -153,7 +159,8 @@ public class NotaService {
         }
         return new CalculaResultadoDto(notaTotalPessoal, notaTotalComercial);
     }
-    public boolean convertToFalse(Boolean campo){
+
+    public boolean convertToFalse(Boolean campo) {
         return null != campo && campo;
     }
 
@@ -166,14 +173,14 @@ public class NotaService {
                         .sorted(Comparator.comparing(Nota::getData).reversed())
                         .collect(Collectors.toList()))
                 .findFirst();
-        if (notas.isEmpty()){
+        if (notas.isEmpty()) {
             throw new NotFoundException("Não foi encontrado nem uma nota para este usuário.");
         }
         return notas.get();
 
     }
 
-    public List<Conta> filtrarContasPorTipoCarteira(Usuario usuario, TipoCarteira tipo){
+    public List<Conta> filtrarContasPorTipoCarteira(Usuario usuario, TipoCarteira tipo) {
         return usuario.getCarteiras().stream()
                 .filter(carteira -> carteira.getTipo().equals(tipo))
                 .toList().get(0).getContas();
