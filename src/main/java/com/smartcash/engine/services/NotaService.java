@@ -165,18 +165,19 @@ public class NotaService {
     }
 
     public List<Nota> findByTipoNota(String email, TipoCarteira tipoCarteira, TipoNota tipoNota) {
+        var notas = new ArrayList<Nota>();
         var usuario = usuarioService.getByEmail(email);
         var contas = filtrarContasPorTipoCarteira(usuario, tipoCarteira);
-        var notas = contas.stream()
+        contas.stream()
                 .map(conta -> conta.getNotas().stream()
                         .filter(nota -> nota.getTipo().equals(tipoNota))
                         .sorted(Comparator.comparing(Nota::getData).reversed())
                         .collect(Collectors.toList()))
-                .findFirst();
+                .forEach(notas::addAll);
         if (notas.isEmpty()) {
             throw new NotFoundException("Não foi encontrado nem uma nota para este usuário.");
         }
-        return notas.get();
+        return notas;
 
     }
 
